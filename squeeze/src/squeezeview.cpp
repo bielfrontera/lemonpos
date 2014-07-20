@@ -2398,6 +2398,13 @@ void squeezeView::stockCorrection()
     oldStockQty = myDb->getProductStockQty(pcode);
     ProductInfo p = myDb->getProductInfo(QString::number(pcode));
     bool isAGroup = p.isAGroup;
+    if (p.code == 0) {
+        notifierPanel->setSize(350,150);
+        notifierPanel->setOnBottom(false);
+        notifierPanel->showNotification(i18n("<b>Product not found</b>"),5000);
+        qDebug()<<"Product not found on stockCorrection.";
+        return;
+    }
 
     //if is an Unlimited stock product, do not allow to make the correction.
     if (p.hasUnlimitedStock)  {
@@ -2418,7 +2425,7 @@ void squeezeView::stockCorrection()
       return;
     }
     qDebug()<<"New Qty:"<<newStockQty<<" Reason:"<<reason;
-    correctStock(pcode, oldStockQty, newStockQty, reason);
+    correctStock(p.code, oldStockQty, newStockQty, reason);
     delete myDb;
   }
 }
@@ -2427,11 +2434,15 @@ void squeezeView::correctStock(qulonglong code, double oldStock, double newStock
 {
   Azahar *myDb = new Azahar;
   myDb->setDatabase(db);
-  if (!myDb->correctStock(code, oldStock, newStock, reason ))
+  if (!myDb->correctStock(code, oldStock, newStock, reason )){
       qDebug()<<myDb->lastError();
-  else {
+      notifierPanel->setSize(350,150);
+      notifierPanel->setOnBottom(false);
+      notifierPanel->showNotification(i18n("<b>Cannot modify stock:</b> Database error"),5000);
+  }else {
       //Log event.
       log(loggedUserId,QDate::currentDate(), QTime::currentTime(), i18n("Stock Correction: [Product %1] from %2 to %3. Reason:%4",code,oldStock,newStock, reason));
+      notifierPanel->showNotification(i18n("<b>Stock modified</b><br/> - <b>Old stock</b>: %1.<br/> - <b>New stock</b>: %2", QString::number(oldStock), QString::number(newStock)),5000);
   }
   delete myDb;
 }

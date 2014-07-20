@@ -74,6 +74,7 @@ PurchaseEditor::PurchaseEditor( QWidget *parent )
     connect( ui->editUtility , SIGNAL( textEdited(const QString &) ), this, SLOT( calculatePrice() ) );
     //connect( ui->editCode, SIGNAL(textEdited(const QString &)), SLOT(timerCheck())); for slow type... just keep the "enter"
     connect( ui->editCode, SIGNAL(returnPressed()), SLOT(checkIfCodeExists()));
+    connect( ui->editAlphacode, SIGNAL(returnPressed()), SLOT(checkIfCodeExists()));
     //connect( ui->editCode, SIGNAL(returnPressed()), ui->editQty, SLOT(setFocus()));
     connect( ui->btnAddItem, SIGNAL( clicked() ), this, SLOT( addItemToList() ) );
     connect(ui->groupBoxedItem, SIGNAL(toggled(bool)), this, SLOT(focusItemsPerBox(bool)) );
@@ -467,7 +468,9 @@ void PurchaseEditor::checkIfCodeExists()
   myDb->setDatabase(db);
   gelem = "";
   QString codeStr = ui->editCode->text();
-  if (codeStr.isEmpty()) codeStr = "0";
+  if (codeStr.isEmpty()){
+      codeStr = ui->editAlphacode->text();      
+  }
   qulonglong cVc = 0;
   cVc = myDb->getProductCodeFromVendorcode(codeStr);
   ProductInfo pInfo;
@@ -487,6 +490,7 @@ void PurchaseEditor::checkIfCodeExists()
     qtyOnDb  = pInfo.stockqty;
     qDebug()<<"Product code:"<<pInfo.code<<" Product AlphaCode:"<<pInfo.alphaCode<<" qtyOnDb:"<<qtyOnDb<<" SubCat:"<<pInfo.subcategory;
     //Prepopulate dialog...
+    ui->editCode->setText(QString::number(pInfo.code));
     ui->editDesc->setText(pInfo.desc);
     setDepartment(pInfo.department);
     setCategory(pInfo.category);
@@ -559,7 +563,7 @@ void PurchaseEditor::addItemToList()
   myDb->setDatabase(db);
   bool ok=false;
 
-  if (ui->editCode->text().isEmpty()) ui->editCode->setFocus();
+  if (ui->editCode->text().isEmpty() && ui->editAlphacode->text().isEmpty()) ui->editCode->setFocus();
   else if (ui->editQty->text().isEmpty() || ui->editQty->text()=="0") ui->editQty->setFocus();
   else if (ui->editDesc->text().isEmpty()) ui->editDesc->setFocus();
   else if (ui->editPoints->text().isEmpty()) ui->editPoints->setFocus();
@@ -572,7 +576,15 @@ void PurchaseEditor::addItemToList()
   else ok = true;
 
   if (ok) {
-    ProductInfo info = myDb->getProductInfo(  getCodeStr() );
+    QString code = getCodeStr();
+    if (code.length() == 0){
+        code = getAlphacode();
+    }
+    if (code.length() == 0){
+        errorPanel->showTip(i18n("<b>Please, fill code or alphacode.</b>"), 2000);
+        return;
+    }
+    ProductInfo info = myDb->getProductInfo(code);
 
     //if is an Unlimited stock product, do not allow to add to the purchase.
     if (info.hasUnlimitedStock)  {

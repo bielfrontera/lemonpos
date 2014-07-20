@@ -190,7 +190,7 @@ void ProvidersEditor::addItem()
       qDebug()<<"The product "<<code<<" is not provided by the porvider yet";
       //insert into the db.
       ProductProviderInfo info;
-      info.prodId = code;
+      info.prodId = pInfo.code;
       info.provId = m_pInfo.id;
       info.price  = pInfo.price;
       myDb->addProductToProvider(info);

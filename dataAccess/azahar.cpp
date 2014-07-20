@@ -82,7 +82,7 @@ bool  Azahar::correctStock(qulonglong pcode, double oldStockQty, double newStock
   QDate date = QDate::currentDate();
   QTime time = QTime::currentTime();
   query.prepare("INSERT INTO stock_corrections (product_id, new_stock_qty, old_stock_qty, reason, date, time) VALUES(:pcode, :newstock, :oldstock, :reason, :date, :time); ");
-  query.bindValue(":pcode", pcode);
+  query.bindValue(":pcode", p.code);
   query.bindValue(":newstock", newStockQty);
   query.bindValue(":oldstock", oldStockQty);
   query.bindValue(":reason", reason);
@@ -103,7 +103,7 @@ double Azahar::getProductStockQty(qulonglong code)
 {
   double result=0.0;
   if (db.isOpen()) {
-    QString qry = QString("SELECT stockqty from products WHERE code=%1").arg(code);
+    QString qry = QString("SELECT stockqty from products WHERE CODE='%1' or ALPHACODE='%1'").arg(code);
     QSqlQuery query(db);
     if (!query.exec(qry)) {
       int errNum = query.lastError().number();
@@ -690,7 +690,7 @@ bool Azahar::decrementProductStock(qulonglong code, double qty, QDate date)
    
   QSqlQuery query(db);
   query.prepare("UPDATE products SET datelastsold=:dateSold , stockqty=stockqty-:qty , soldunits=soldunits+:qtys WHERE code=:id");
-  query.bindValue(":id", code);
+  query.bindValue(":id", p.code);
   query.bindValue(":qty", nqty);
   query.bindValue(":qtys", qtys);
   query.bindValue(":dateSold", date.toString("yyyy-MM-dd"));
@@ -736,7 +736,7 @@ bool Azahar::incrementProductStock(qulonglong code, double qty)
   // nqty is the qty to ADD or DEC, qtys is the qty to ADD_TO_SOLD_UNITS only.
 
   query.prepare("UPDATE products SET stockqty=stockqty+:qty , soldunits=soldunits-:qtys WHERE code=:id");
-  query.bindValue(":id", code);
+  query.bindValue(":id", p.code);
   query.bindValue(":qty", nqty);
   query.bindValue(":qtys", qtys);
   if (!query.exec()) setError(query.lastError().text()); else result=true;
@@ -802,7 +802,7 @@ double Azahar::getProductDiscount(qulonglong code, bool isGroup)
     if ( p.isNotDiscountable )
         return 0.0;
             
-    QString qry = QString("SELECT * FROM offers WHERE product_id=%1").arg(code);
+    QString qry = QString("SELECT * FROM offers WHERE product_id=%1").arg(p.code);
     if (!query2.exec(qry)) { setError(query2.lastError().text()); }
     else {
       QList<double> descuentos; descuentos.clear();
@@ -1961,7 +1961,7 @@ bool Azahar::createOffer(OfferInfo info)
   query.bindValue(":discount", info.discount );
   query.bindValue(":datestart", info.dateStart.toString("yyyy-MM-dd"));
   query.bindValue(":dateend", info.dateEnd.toString("yyyy-MM-dd"));
-  query.bindValue(":code", info.productCode);
+  query.bindValue(":code", p.code);
   if (query.exec()) result = true; else setError(query.lastError().text());
 
   return result;
