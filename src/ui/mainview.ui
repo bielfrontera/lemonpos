@@ -550,7 +550,7 @@
                        <string>Currency conversion</string>
                       </property>
                       <property name="text">
-                       <string>$</string>
+                       <string>€</string>
                       </property>
                       <property name="shortcut">
                        <string>Ctrl+Alt+C</string>

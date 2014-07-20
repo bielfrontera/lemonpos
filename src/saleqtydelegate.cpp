@@ -28,7 +28,10 @@ QWidget *SaleQtyDelegate::createEditor(QWidget *parent, const QStyleOptionViewIt
     } else {
         //I dont want to create editors on other fields. What/How to do this? editor=null?
         QLineEdit *editor = new QLineEdit(parent);
-        editor->setReadOnly(true);
+	// BFB, enable discount, price and description
+	if (index.column() != 2 && index.column() != 5 && index.column() != 1){
+	  editor->setReadOnly(true);
+	}
         return editor;
     }
 }

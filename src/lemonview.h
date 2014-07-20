@@ -395,6 +395,7 @@ public:
     void printCreditReport();
 
     void qtyChanged(QTableWidgetItem *item);
+    void itemChanged(QTableWidgetItem *item);
     void modifyClientsFilterModel();
     void modifyClientsFilterModelB();
     void verifyDiscountEntry();

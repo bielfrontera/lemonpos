@@ -145,7 +145,7 @@ void lemonView::cancelByExit()
   }
 }
 
-lemonView::lemonView(QWidget *parent) //: QWidget(parent)
+lemonView::lemonView(QWidget *parent): QWidget(parent)
 {
   qDebug()<<"===STARTING LEMON AT "<<QDateTime::currentDateTime().toString()<<" ===";
   drawerCreated=false;
@@ -163,7 +163,7 @@ lemonView::lemonView(QWidget *parent) //: QWidget(parent)
   dlgLogin = new LoginWindow(this,
                              i18n("Welcome to Lemon"),
                              i18n("Enter username and password to start using the system."),
-                             LoginWindow::FullScreen);
+                             LoginWindow::PasswordOnly);
   dlgPassword = new LoginWindow(this,
                              i18n("Authorisation Required"),
                              i18n("Enter administrator password please."),
@@ -241,8 +241,8 @@ lemonView::lemonView(QWidget *parent) //: QWidget(parent)
   connect(ui_mainview.editItemCode, SIGNAL(returnPressed()), this, SLOT(doEmitSignalQueryDb()));
   connect(this, SIGNAL(signalQueryDb(QString)), this, SLOT(insertItem(QString)) );
   //NOTE:Disabling For editing. connect(ui_mainview.tableWidget, SIGNAL(itemDoubleClicked(QTableWidgetItem*)), SLOT(itemDoubleClicked(QTableWidgetItem*)) );
-  connect(ui_mainview.tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(qtyChanged(QTableWidgetItem*)));
-  connect(ui_mainview.tableWidget, SIGNAL(itemDoubleClicked(QTableWidgetItem*)), SLOT(itemDoubleClicked(QTableWidgetItem*)) );
+  // connect(ui_mainview.tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(qtyChanged(QTableWidgetItem*)));
+  connect(ui_mainview.tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(itemChanged(QTableWidgetItem*)));
   //connect(ui_mainview.tableSearch, SIGNAL(itemDoubleClicked(QTableWidgetItem*)), SLOT(itemSearchDoubleClicked(QTableWidgetItem*)) );
   connect(ui_mainview.tableSearch, SIGNAL(itemActivated(QTableWidgetItem*)), SLOT(itemSearchDoubleClicked(QTableWidgetItem*)) );
   connect(ui_mainview.tableWidget, SIGNAL(itemClicked(QTableWidgetItem*)), SLOT(displayItemInfo(QTableWidgetItem*)));
@@ -446,6 +446,105 @@ void lemonView::qtyChanged(QTableWidgetItem *item)
             }
         }
     }
+}
+
+void lemonView::itemChanged(QTableWidgetItem *item)
+{
+    //NOTE: This method is executed only when the data is changed. If the delegate does not allow the change, then this is not executed (signal not emitted).
+    //qDebug()<<"qtyChanged: "<<item->data(Qt::DisplayRole).toString()<<" COLUMN:"<<item->column();
+    ///NOTE: Allow price change this way too?. It is more difficult than qty change, implies permissions.
+    ///      The  spinbox only support integers. We need a config option to turn ON/OFF this feature.
+    //get item code
+    if (!item)
+        return;
+    int row = item->row();    
+    QTableWidgetItem *i2Modify = ui_mainview.tableWidget->item(row, colCode);
+    qulonglong code = i2Modify->data(Qt::DisplayRole).toULongLong();
+    //is it an SO or a product?
+    if ( !productsHash.contains(code) ) {
+        qDebug()<<"Product not in the hash. SpecialOrders are not supported yet.";
+        return;
+    }
+    //ok so now check qtys to see if they are available at stock.
+    ProductInfo info = productsHash.take(code);    
+    if (item && item->column() == colQty) { //item == ui_mainview.tableWidget ->currentItem() &&
+        double newQty = item->data(Qt::DisplayRole).toDouble();
+        //TODO:Create and assign a delegate to handle limits on the spinbox.
+        double stockqty = info.stockqty;
+        QStringList itemsNotAvailable;
+        bool available = true;
+        double old_qty = info.qtyOnList;//To reject the new qty if not available.
+        qDebug()<<"Old item on list:"<<old_qty;
+        if (info.isAGroup) {
+            Azahar *myDb = new Azahar;
+            myDb->setDatabase(db);
+            QStringList lelem = info.groupElementsStr.split(",");
+            foreach(QString ea, lelem) {
+                qulonglong c  = ea.section('/',0,0).toULongLong();
+                double     qq = ea.section('/',1,1).toDouble();
+                ProductInfo pi = myDb->getProductInfo(QString::number(c));
+                QString unitStr;
+                bool yes = false;
+                double onList = getTotalQtyOnList(pi); // item itself and contained in any gruped product.
+                // q     : item qty to add == newQty here
+                // qq    : item qty on current grouped element to add
+                // qq*q  : total items to add for this product.
+                // onList: items of the same product already on the shopping list.
+                if (pi.stockqty >= ((qq*newQty)+onList) ) yes = true;
+                available = (available && yes );
+                if (!yes) {
+                    itemsNotAvailable << i18n("%1 has %2 %3 but requested %4 + %5",pi.desc,pi.stockqty,unitStr,qq*newQty,onList);
+                }
+                qDebug()<<pi.desc<<" qtyonstock:"<<pi.stockqty<<" needed qty (onlist and new):"<<QString::number((qq*newQty)+onList);
+            }
+            delete myDb;
+        } else {
+            double onList = getTotalQtyOnList(info); // item itself and contained in any gruped product.
+            if (stockqty >= newQty+onList) available = true; else available = false;
+            qDebug()<<info.desc<<" qtyonstock:"<<info.stockqty<<" needed qty (onlist and new):"<<QString::number(newQty+onList);
+        }
+
+        if (!available) {
+            QString msg;
+            double onList = getTotalQtyOnList(info); // item itself and contained in any gruped product.
+            //remove the inserted qty by the user (restore old_qty)
+            item->setData(Qt::EditRole, QVariant(old_qty));
+            qDebug()<<"Se restablecio la cantidad original de:"<<old_qty<<". Se ignora la cantidad requerida:"<<newQty;
+            if (!itemsNotAvailable.isEmpty())
+                msg = i18n("<html><font color=red><b>The group/pack is not available because:<br>%1</b></font></html>", itemsNotAvailable.join("<br>"));
+            else
+                msg = i18n("<html><font color=red><b>There are only %1 articles of your choice at stock.<br> You requested %2</b></font></html>", info.stockqty,newQty+onList);
+
+            if (ui_mainview.mainPanel->currentIndex() == pageMain) {
+                tipCode->showTip(msg, 6000);
+            }
+            if (ui_mainview.mainPanel->currentIndex() == pageSearch) {
+                ui_mainview.labelSearchMsg->setText(msg);
+                ui_mainview.labelSearchMsg->show();
+                QTimer::singleShot(3000, this, SLOT(clearLabelSearchMsg()) );
+            }
+            return;
+        } 
+        //Available, continue...
+        info.qtyOnList = newQty;
+    }
+    if (item && item->column() == colPrice) {
+        double newPrice = item->data(Qt::DisplayRole).toDouble();
+        info.price = newPrice;        
+    }
+    if (item && item->column() == colDisc) {
+        double newDisc = item->data(Qt::DisplayRole).toDouble();
+        info.disc = newDisc;        
+    }    
+    if (item && item->column() == colDesc) {
+        QString newDesc  = item->data(Qt::DisplayRole).toString();
+        info.desc = newDesc;        
+    }    
+    // Column diferent of quantity
+    productsHash.insert(info.code, info);
+    updateItem(info);
+    refreshTotalLabel();
+    ui_mainview.editItemCode->setFocus();
 }
 
 void lemonView::showChangeDate()
@@ -1999,8 +2098,10 @@ void lemonView::itemDoubleClicked(QTableWidgetItem* item)
       //check if is completing the order
       if (info.status == stReady) return; //is completing the order, cant modify qty.
 
-      iqty = info.qty+1;
-      info.qty = iqty;
+      // BFB do not add a new qty on doble click
+      // iqty = info.qty+1;
+      iqty = info.qty;
+      // info.qty = iqty;
       double newdiscount = info.disc * info.payment * iqty;
 
       i2Modify = ui_mainview.tableWidget->item(row, colQty);
@@ -4313,6 +4414,7 @@ void lemonView::setupModel()
     productsModel->select();
 
     //Categories popuplist
+    ui_mainview.comboFilterByCategory->addItem(i18n("All"));
     populateCategoriesHash();
     QHashIterator<QString, int> item(categoriesHash);
     while (item.hasNext()) {
@@ -4510,17 +4612,20 @@ void lemonView::setFilter()
       QString catText = ui_mainview.comboFilterByCategory->currentText();
       if (categoriesHash.contains(catText)) {
         catId = categoriesHash.value(catText);
-      }
-      //Now check subcategory
-      if (ui_mainview.rbFilterBySubCategory->isChecked()){
-        QString subCatText = ui_mainview.comboFilterBySubCategory->currentText();
-        if (subcategoriesHash.contains(subCatText))
-            subCatId = subcategoriesHash.value(subCatText);
-      }//filter by subcategory, only if filterByCategory is checked.
-      if (subCatId > 0)
-        productsModel->setFilter(QString("products.isARawProduct=false and products.category=%1 and products.subcategory=%2").arg(catId).arg(subCatId));
-      else
-        productsModel->setFilter(QString("products.isARawProduct=false and products.category=%1").arg(catId));
+        //Now check subcategory
+        if (ui_mainview.rbFilterBySubCategory->isChecked()){
+            QString subCatText = ui_mainview.comboFilterBySubCategory->currentText();
+            if (subcategoriesHash.contains(subCatText))
+                subCatId = subcategoriesHash.value(subCatText);
+        }//filter by subcategory, only if filterByCategory is checked.
+        if (subCatId > 0)
+            productsModel->setFilter(QString("products.isARawProduct=false and products.category=%1 and products.subcategory=%2").arg(catId).arg(subCatId));
+        else
+            productsModel->setFilter(QString("products.isARawProduct=false and products.category=%1").arg(catId));        
+      }else{
+        // Show all products  
+        productsModel->setFilter(QString("products.isARawProduct=false"));  
+      }      
     } else { //by most sold products in current month --biel
       productsModel->setFilter("products.isARawProduct=false and (products.datelastsold > ADDDATE(sysdate( ), INTERVAL -31 DAY )) ORDER BY products.datelastsold DESC"); //limit or not the result to 5?
       
