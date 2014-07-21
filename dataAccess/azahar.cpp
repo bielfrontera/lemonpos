@@ -173,6 +173,7 @@ ProductInfo Azahar::getProductInfo(const QString &code, const bool &notConsiderD
   ProductInfo info;
   info.code=0;
   info.desc="Ninguno";
+  info.longDesc="";
   info.price=0;
   info.disc=0;
   info.cost=0;
@@ -227,7 +228,8 @@ ProductInfo Azahar::getProductInfo(const QString &code, const bool &notConsiderD
     C.text as CATEGORY, \
     PR.name as LASTPROVIDER ,\
     T.tname as TAXNAME, \
-    T.elementsid as TAXELEM \
+    T.elementsid as TAXELEM, \
+    P.longdesc AS LONGDESC \
     FROM products AS P, taxmodels as T, providers as PR, categories as C, measures as U \
     WHERE PR.id=P.lastproviderid AND T.modelid=P.taxmodel \
     AND C.catid=P.category AND U.id=P.units\
@@ -248,6 +250,7 @@ ProductInfo Azahar::getProductInfo(const QString &code, const bool &notConsiderD
         int fieldGroupPD = query.record().indexOf("GPRICEDROP");
         int fieldCODE = query.record().indexOf("CODE");
         int fieldDesc = query.record().indexOf("NAME");
+        int fieldLongDesc = query.record().indexOf("LONGDESC");
         int fieldPrice= query.record().indexOf("PRICE");
         int fieldPhoto= query.record().indexOf("PHOTO");
         int fieldCost= query.record().indexOf("COST");
@@ -277,6 +280,7 @@ ProductInfo Azahar::getProductInfo(const QString &code, const bool &notConsiderD
         info.alphaCode = query.value(fieldAlphaCode).toString();
         info.vendorCode = query.value(fieldVendorCode).toString();
         info.desc     = query.value(fieldDesc).toString();
+        info.longDesc     = query.value(fieldLongDesc).toString();
         info.price    = query.value(fieldPrice).toDouble();
         info.photo    = query.value(fieldPhoto).toByteArray();
         info.stockqty = query.value(fieldStock).toDouble();
@@ -550,7 +554,7 @@ bool Azahar::insertProduct(ProductInfo info)
   if (info.hasUnlimitedStock)
       info.stockqty = 1; //for not showing "Not Available" in the product delegate.
   
-  query.prepare("INSERT INTO products (code, name, price, stockqty, cost, soldunits, datelastsold, units, taxpercentage, extrataxes, photo, department, category, subcategory, points, alphacode, vendorcode, lastproviderid, isARawProduct,isAGroup, groupElements, groupPriceDrop, taxmodel, hasUnlimitedStock, isNotDiscountable ) VALUES (:code, :name, :price, :stock, :cost, :soldunits, :lastgetld, :units, :tax1, :tax2, :photo, :department, :category, :subcategory, :points, :alphacode, :vendorcode, :lastproviderid, :isARaw, :isAGroup, :groupE, :groupPriceDrop, :taxmodel, :unlimitedStock, :NonDiscountable);");
+  query.prepare("INSERT INTO products (code, name, price, stockqty, cost, soldunits, datelastsold, units, taxpercentage, extrataxes, photo, department, category, subcategory, points, alphacode, vendorcode, lastproviderid, isARawProduct,isAGroup, groupElements, groupPriceDrop, taxmodel, hasUnlimitedStock, isNotDiscountable, longdesc ) VALUES (:code, :name, :price, :stock, :cost, :soldunits, :lastgetld, :units, :tax1, :tax2, :photo, :department, :category, :subcategory, :points, :alphacode, :vendorcode, :lastproviderid, :isARaw, :isAGroup, :groupE, :groupPriceDrop, :taxmodel, :unlimitedStock, :NonDiscountable, :longDesc);");
   query.bindValue(":code", info.code);
   query.bindValue(":name", info.desc);
   query.bindValue(":price", info.price);
@@ -576,6 +580,7 @@ bool Azahar::insertProduct(ProductInfo info)
   query.bindValue(":taxmodel", info.taxmodelid); //for later use
   query.bindValue(":unlimitedStock", info.hasUnlimitedStock);
   query.bindValue(":NonDiscountable", info.isNotDiscountable);
+  query.bindValue(":longDesc", info.longDesc);
 
   if (!query.exec()) setError(query.lastError().text()); else result=true;
 
@@ -642,11 +647,13 @@ bool Azahar::updateProduct(ProductInfo info, qulonglong oldcode)
   groupElements=:ge, \
   groupPriceDrop=:groupPriceDrop, \
   isNotDiscountable=:NonDiscountable, \
-  hasUnlimitedStock=:unlimitedStock \
+  hasUnlimitedStock=:unlimitedStock, \
+  longdesc=:longDesc \
   WHERE code=:id;");
   
   query.bindValue(":newcode", info.code);
   query.bindValue(":name", info.desc);
+  query.bindValue(":longDesc", info.longDesc);
   query.bindValue(":price", info.price);
   query.bindValue(":stock", info.stockqty);
   query.bindValue(":cost", info.cost);

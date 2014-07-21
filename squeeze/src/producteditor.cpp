@@ -106,6 +106,7 @@ ProductEditor::ProductEditor( QWidget *parent, bool newProduct )
     connect( ui->btnStockCorrect,      SIGNAL( clicked() ), this, SLOT( modifyStock() ));
 
     connect( ui->editDesc, SIGNAL(editingFinished()), this, SLOT(checkFieldsState()));
+    connect( ui->editLongDesc, SIGNAL(editingFinished()), this, SLOT(checkFieldsState()));
     connect( ui->editStockQty, SIGNAL(editingFinished()), this, SLOT(checkFieldsState()));
     connect( ui->editPoints, SIGNAL(editingFinished()), this, SLOT(checkFieldsState()));
     connect( ui->editCost, SIGNAL(editingFinished()), this, SLOT(checkFieldsState()));
@@ -566,6 +567,7 @@ void ProductEditor::checkIfCodeExists()
       ui->editAlphacode->setText( pInfo.alphaCode );
       ui->editVendorcode->setText( pInfo.vendorCode );
       ui->editDesc->setText(pInfo.desc);
+      ui->editLongDesc->setText(pInfo.longDesc);
       ui->editStockQty->setText(QString::number(pInfo.stockqty));
       setDepartment(pInfo.department);
       setCategory(pInfo.category);
@@ -605,6 +607,7 @@ void ProductEditor::checkIfCodeExists()
       ui->editAlphacode->clear();
       ui->editVendorcode->clear();
       ui->editDesc->clear();
+      ui->editLongDesc->clear();
       ui->editStockQty->clear();
       setDepartment(1);
       setCategory(1);

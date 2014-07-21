@@ -2157,6 +2157,7 @@ void squeezeView::productsViewOnSelected(const QModelIndex &index)
       pInfo.vendorCode= productEditorDlg->getVendorcode();
       pInfo.code     = newcode;
       pInfo.desc     = productEditorDlg->getDescription();
+      pInfo.longDesc     = productEditorDlg->getLongDescription();
       //be aware of grouped products related to stock.
       if (productEditorDlg->isGroup()) {
         pInfo.stockqty = productEditorDlg->getGRoupStockMax();
@@ -2556,6 +2557,7 @@ void squeezeView::createProduct()
         info.alphaCode = prodEditorDlg->getAlphacode();
         info.vendorCode = prodEditorDlg->getVendorcode();
         info.desc    = prodEditorDlg->getDescription();
+        info.longDesc = prodEditorDlg->getLongDescription();
         info.price   = prodEditorDlg->getPrice();
         info.cost    = prodEditorDlg->getCost();
         info.purchaseQty = info.stockqty;

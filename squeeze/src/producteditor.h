@@ -53,6 +53,7 @@ class ProductEditor : public KDialog
     QString getAlphacode()   { return ui->editAlphacode->text(); };
     QString getVendorcode()   { return ui->editVendorcode->text(); };
     QString getDescription() { return ui->editDesc->text(); };
+    QString getLongDescription() { return ui->editLongDesc->toHtml(); };
     double  getStockQty()    { return ui->editStockQty->text().toDouble(); };
     int     getDepartmentId();
     int     getCategoryId();
@@ -90,6 +91,7 @@ class ProductEditor : public KDialog
     void    setAlphacode(QString c)    { ui->editAlphacode->setText(c); };
     void    setVendorcode(QString c)    { ui->editVendorcode->setText(c); };
     void    setDescription(QString d)  {ui->editDesc->setText(d); };
+    void    setLongDescription(QString d)  {ui->editLongDesc->setText(d); };
     void    setStockQty(double q)      {ui->editStockQty->setText(QString::number(q)); };
     void    setDepartment(QString str);
     void    setDepartment(int i);

@@ -491,7 +491,7 @@ void PurchaseEditor::checkIfCodeExists()
     qDebug()<<"Product code:"<<pInfo.code<<" Product AlphaCode:"<<pInfo.alphaCode<<" qtyOnDb:"<<qtyOnDb<<" SubCat:"<<pInfo.subcategory;
     //Prepopulate dialog...
     ui->editCode->setText(QString::number(pInfo.code));
-    ui->editDesc->setText(pInfo.desc);
+    ui->editDesc->setText(pInfo.desc);    
     setDepartment(pInfo.department);
     setCategory(pInfo.category);
     setSubCategory(pInfo.subcategory);

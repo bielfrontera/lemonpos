@@ -31,6 +31,7 @@
 struct ProductInfo {
   qulonglong code;
   QString desc;
+  QString longDesc;
   double price;
   double disc;
   double discpercentage;
