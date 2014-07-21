@@ -100,6 +100,7 @@ void ProductDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     int aproxPerChar = fm.width("A");
     QString nameToDisplay = name;
     int boxSize = option.rect.width()-15; //minus margin and frame-lines
+    boxSize = boxSize * 1.9;
     if (strSize > boxSize) {
       int excess = strSize-boxSize;
       int charEx = (excess/aproxPerChar)+4;
@@ -110,11 +111,11 @@ void ProductDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->setFont(font);
     if (option.state & QStyle::State_Selected) {
       painter->setPen(Qt::yellow);
-      painter->drawText(option.rect.x()+10,option.rect.y()+138, 150,20,  Qt::AlignCenter, nameToDisplay);
+      painter->drawText(option.rect.x()+15,option.rect.y()+115, 140,50,  Qt::TextWordWrap | Qt::AlignCenter, nameToDisplay);
     }
     else {
       painter->setPen(Qt::white);
-      painter->drawText(option.rect.x()+10,option.rect.y()+138, 150,20,  Qt::AlignCenter, nameToDisplay);
+      painter->drawText(option.rect.x()+15,option.rect.y()+115, 140,50,  Qt::TextWordWrap | Qt::AlignCenter, nameToDisplay);
     }
 
     //painting stock Availability
@@ -147,7 +148,7 @@ void ProductDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->setBackground(QColor(255,225,0,160));
     painter->drawText(option.rect.x()+10,
                       option.rect.y()+10,
-                      150, 20, Qt::AlignCenter, strCode);
+                      150, 20, Qt::AlignCenter, i18n("Stock") + ": " + QString::number(stockqty));
     painter->setBackgroundMode(Qt::TransparentMode);
 
     //painting things like isARawProduct and isAGroup
