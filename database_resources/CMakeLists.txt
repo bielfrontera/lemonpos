@@ -1,5 +1,8 @@
 install( FILES
          lemon_mysql.sql
+         lemon_mysql_real.sql
+         fix_0.9.5.1.sql
+         fix_0.9.5.0.sql
          fix_0.9.4rc8.sql
          fix_0.9.3rc.sql
          fix_0.9.3.sql
