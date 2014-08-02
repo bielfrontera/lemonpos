@@ -403,6 +403,8 @@ void squeezeView::setupSignalConnections()
 
   connect(ui_mainview.btnAddCurrency, SIGNAL(clicked()), SLOT(createCurrency()));
   connect(ui_mainview.btnDeleteCurrency, SIGNAL(clicked()), SLOT(deleteSelectedCurrency()));
+  
+  connect(ui_mainview.editSearchProduct, SIGNAL(returnPressed()), SLOT(searchProduct()));
 }
 
 void squeezeView::doEmitSignalSalir()
@@ -1285,6 +1287,23 @@ else {
  }
 }
 
+void squeezeView::searchProduct(){
+    QString strCode = ui_mainview.editSearchProduct->text();
+    if (strCode.isEmpty()){
+        return;
+    }    
+    Azahar *myDb = new Azahar;
+    myDb->setDatabase(db);
+    ProductInfo info = myDb->getProductInfo(strCode);
+    delete myDb;
+    if (info.code > 0) {
+        ui_mainview.editSearchProduct->clear();
+        openProduct(info.code);
+    }else{
+      KMessageBox::information(this, i18n("There is no product with this code or alphacode."), i18n("Product not found"));      
+    }
+}
+
 void squeezeView::setupOffersModel()
 {
   offersModel->setTable("offers");
@@ -2133,12 +2152,14 @@ void squeezeView::productsViewOnSelected(const QModelIndex &index)
     qulonglong id = model->data(indx, Qt::DisplayRole).toULongLong();
     
     indx = model->index(row, productsModel->fieldIndex("photo"));
-    QByteArray photoBA = model->data(indx, Qt::DisplayRole).toByteArray();
-    QPixmap photo;
-    photo.loadFromData(photoBA);
-
+    // QByteArray photoBA = model->data(indx, Qt::DisplayRole).toByteArray();
+    // QPixmap photo;
+    // photo.loadFromData(photoBA);
+    openProduct(id);
+  }
+}
+void squeezeView::openProduct(qulonglong code){
     ProductInfo pInfo;
-
     //Launch Edit dialog
     ProductEditor *productEditorDlg = new ProductEditor(this, false);
     //Set data on dialog
@@ -2146,7 +2167,7 @@ void squeezeView::productsViewOnSelected(const QModelIndex &index)
     productEditorDlg->disableCode(); //On Edit product, code cannot be changed.
     productEditorDlg->setStockQtyReadOnly(true); //on edit, cannot change qty to force use stockCorrection
     productEditorDlg->setDb(db);
-    productEditorDlg->setCode(id);
+    productEditorDlg->setCode(code);   
    
     qulonglong newcode=0;
     //Launch dialog, and if dialog is accepted...
@@ -2182,6 +2203,7 @@ void squeezeView::productsViewOnSelected(const QModelIndex &index)
       pInfo.category = productEditorDlg->getCategoryId();
       pInfo.subcategory = productEditorDlg->getSubCategoryId();
       pInfo.points   = productEditorDlg->getPoints();
+      QPixmap photo;
       photo          = productEditorDlg->getPhoto();
       pInfo.photo    = Misc::pixmap2ByteArray(new QPixmap(photo)); //Photo ByteArray
       //FIXME: NEXT line is temporal remove on 0.8 version
@@ -2194,10 +2216,10 @@ void squeezeView::productsViewOnSelected(const QModelIndex &index)
       //Update database
       Azahar *myDb = new Azahar;
       myDb->setDatabase(db);
-      if (!myDb->updateProduct(pInfo, id)) qDebug()<<myDb->lastError();
+      if (!myDb->updateProduct(pInfo, code)) qDebug()<<myDb->lastError();
       // Checar ofertas y cambiarlas/borrarlas
-      if (id != newcode) {
-        if (!myDb->moveOffer(id, newcode)) qDebug()<<myDb->lastError();
+      if (code != newcode) {
+        if (!myDb->moveOffer(code, newcode)) qDebug()<<myDb->lastError();
       }
       //now change stock if so --7/Sept/09
       if (productEditorDlg->isCorrectingStock()) {
@@ -2209,10 +2231,8 @@ void squeezeView::productsViewOnSelected(const QModelIndex &index)
       delete myDb;
     }
     delete productEditorDlg;
-    setProductsFilter();
-  }
+    setProductsFilter();    
 }
-
 void squeezeView::clientsViewOnSelected(const QModelIndex & index)
 {
   if (db.isOpen()) {

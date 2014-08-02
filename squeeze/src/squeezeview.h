@@ -145,8 +145,10 @@ signals:
    void showTransactionsPage();
    void showReports();
    void showRandomMsgs();
+   void searchProduct();
    void usersViewOnSelected(const QModelIndex & index);
    void productsViewOnSelected(const QModelIndex &index);
+   void openProduct(qulonglong code);
    void clientsViewOnSelected(const QModelIndex &index);
    void doPurchase();
    void stockCorrection();

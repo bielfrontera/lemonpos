@@ -111,7 +111,7 @@ void squeeze::fixGeom()
     QRect geom = geometry();
     geom.setHeight(QApplication::desktop()->screenGeometry(this).height()-145);
     geom.setWidth(QApplication::desktop()->screenGeometry(this).width()-5);
-    m_view->setMaximumSize(geom.width(),geom.height());
+    m_view->setMaximumSize(geom.width(),geom.height());    
     //setMaximumSize(geom.width()+5,geom.height()+10);
   }
 }

@@ -19,7 +19,7 @@
   <property name="maximumSize">
    <size>
     <width>16777215</width>
-    <height>655</height>
+    <height>16777215</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -99,7 +99,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>13</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="pageWelcome">
       <layout class="QGridLayout" name="gridLayout">
@@ -921,6 +921,16 @@ p, li { white-space: pre-wrap; }
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_searchProduct">
+           <property name="text">
+            <string>Open product:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="editSearchProduct"/>
          </item>
          <item>
           <widget class="QPushButton" name="btnAddProduct">
