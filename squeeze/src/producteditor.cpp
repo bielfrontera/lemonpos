@@ -102,7 +102,8 @@ ProductEditor::ProductEditor( QWidget *parent, bool newProduct )
     connect( ui->btnChangeCode,      SIGNAL( clicked() ), this, SLOT( changeCode() ) );
     connect( ui->editCode, SIGNAL(textEdited(const QString &)), SLOT(checkIfCodeExists()));
     connect( ui->editCode, SIGNAL(editingFinished()), this, SLOT(checkFieldsState()));
-    connect( ui->editCode, SIGNAL(returnPressed()), this, SLOT(checkFieldsState()));
+    connect( ui->editCode, SIGNAL(returnPressed()), this, SLOT(checkFieldsState()));    
+    connect( ui->editAlphacode, SIGNAL(returnPressed()), this, SLOT(stopEnterPropagation()));    
     connect( ui->btnStockCorrect,      SIGNAL( clicked() ), this, SLOT( modifyStock() ));
 
     connect( ui->editDesc, SIGNAL(editingFinished()), this, SLOT(checkFieldsState()));
@@ -650,6 +651,13 @@ void ProductEditor::checkFieldsState()
   }
 }
 
+
+void ProductEditor::stopEnterPropagation()
+{
+    enableButtonOk(false);
+}
+
+
 void ProductEditor::setPhoto(QPixmap p)
 {
   int max = 150;
@@ -1057,7 +1065,10 @@ qulonglong ProductEditor::getNextCode()
 void ProductEditor::verifyAlphacodeDuplicates()
 {
     QString strAc = ui->editAlphacode->text();
-    if (strAc.isEmpty()) strAc="-1";
+    if (strAc.isEmpty()){        
+        enableButtonOk( true );
+        return;
+    }
 
     Azahar *myDb = new Azahar;
     myDb->setDatabase(db);
@@ -1077,7 +1088,11 @@ void ProductEditor::verifyAlphacodeDuplicates()
 void ProductEditor::verifyVendorcodeDuplicates()
 {
     QString strVc = ui->editVendorcode->text();
-    if (strVc.isEmpty()) strVc="-1";
+    if (strVc.isEmpty()){
+        enableButtonOk( true );
+        return;
+    }
+        
     
     Azahar *myDb = new Azahar;
     myDb->setDatabase(db);

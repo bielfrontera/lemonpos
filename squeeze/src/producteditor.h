@@ -132,6 +132,7 @@ private slots:
     void    calculateProfit(QString amountStr);
     void    checkIfCodeExists();
     void    checkFieldsState();
+    void    stopEnterPropagation();
     void    toggleGroup(bool checked);
     void    toggleRaw(bool checked);
     void    applyFilter(const QString &text);
