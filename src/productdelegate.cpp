@@ -74,16 +74,14 @@ void ProductDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     else {
       pix = QPixmap(DesktopIcon("lemon-box", 64));
     }
-    int max = 128;
-    if ((pix.height() > max) || (pix.width() > max) ) {
-      if (pix.height() == pix.width()) {
-        pix = pix.scaled(QSize(max, max));
+    int max_width = 128;
+    int max_heigth = 80;
+    if ((pix.height() > max_heigth) || (pix.width() > max_width) ) {
+      if (pix.height() > max_heigth) {
+        pix = pix.scaledToHeight(max_heigth);
       }
-      else if (pix.height() > pix.width() ) {
-        pix = pix.scaledToHeight(max);
-      }
-      else  {
-        pix = pix.scaledToWidth(max);
+      if (pix.width() > max_width){
+        pix = pix.scaledToWidth(max_width);
       }
     }
     int x = option.rect.x() + (option.rect.width()/2) - (pix.width()/2);
