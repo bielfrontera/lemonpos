@@ -3989,6 +3989,9 @@ void lemonView::corteDeCaja()
     QString dHour;
     QString dMinute;
     QString dPaidWith;
+    QHash<QString, double> salesByTax;
+    double totalSellAmount = 0.0;
+    QList<TransactionItemInfo> pListItems;
 
     PrintBalanceInfo pbInfo;
 
@@ -4013,6 +4016,10 @@ void lemonView::corteDeCaja()
     QString strAmount      = i18n("Amount");
     QString strPaidWith    = i18n("Paid");
     QString strPayMethodH  = i18n("Method");
+    QString strTitleSalesByVat = i18n("Sales by VAT type");
+    QString strVatType = i18n("VAT type");
+    QString strTotal = i18n("Total");
+
     pbInfo.reservationNote = i18n("When Completing Reservations, the Amount may be grater than Paid (amount) because of the reservation payment.");
 
     QPixmap logoPixmap;
@@ -4051,9 +4058,9 @@ void lemonView::corteDeCaja()
   //       Incluso insertar imagenes en el html del dialogo.
 
     //HTML
-    line = QString("<html><body><h3>%1</h3>").arg(strTitle);
+    line = QString("<html><body><center><h3>%1</h3>").arg(strTitle);
     linesHTML.append(line);
-    line = QString("<center><table border=1 cellpadding=5><tr><th colspan=4>%9</th></tr><tr><th>%1</th><th>%2</th><th>%3</th><th>%4</th></tr><tr><td>%5</td><td>%6</td><td>%7</td><td>%8</td></tr></table></ceter><br>")
+    line = QString("<table border=1 cellpadding=5><tr><th colspan=4>%9</th></tr><tr><th>%1</th><th>%2</th><th>%3</th><th>%4</th></tr><tr><td>%5</td><td>%6</td><td>%7</td><td>%8</td></tr></table><br>")
         .arg(strInitAmountH)
         .arg(strInH)
         .arg(strOutH)
@@ -4119,7 +4126,7 @@ void lemonView::corteDeCaja()
       }
 
       dId       = QString::number(info.id);
-      dAmount   = QString::number(info.amount);
+      dAmount   = KGlobal::locale()->formatMoney(info.amount, QString(), 2);
       dHour     = info.time.toString("hh");
       dMinute   = info.time.toString("mm");
       dPaidWith = QString::number(info.paywith);
@@ -4159,6 +4166,20 @@ void lemonView::corteDeCaja()
       linesHTML.append(line);
       tmp += "|"+dPayMethod;
       trList.append( tmp );
+      
+      
+      // Get transaction items. Acumulate sell amount by vat type
+      pListItems = myDb->getTransactionItems(info.id);
+      for (int j = 0; j < pListItems.size(); ++j) {
+          TransactionItemInfo trItem = pListItems.at(j);
+          QString tax = QString("%1\%").arg(trItem.tax);
+          if (salesByTax.contains(tax)){
+              salesByTax[tax] += trItem.total;
+          }else{
+              salesByTax[tax] = trItem.total;
+          }
+          totalSellAmount += trItem.total;
+      }        
     }
     pbInfo.trList = trList;
 
@@ -4180,9 +4201,42 @@ void lemonView::corteDeCaja()
     }
     pbInfo.cfList = cfList;
 
-    line = QString("</table></body></html>");
+    line = QString("</table><br>");
+    linesHTML.append(line);
+    
+    // Add totals by vat
+    line = QString("<table border=1 cellpadding=5><tr><th colspan=2>%1</th></tr><tr><th>%2</th><th>%3</th></tr>")
+        .arg(strTitleSalesByVat)
+        .arg(strVatType)
+        .arg(strAmount);
     linesHTML.append(line);
 
+    lines.append(strTitleSalesByVat);   
+    
+    QHash<QString, double>::iterator i;
+    for (i = salesByTax.begin(); i != salesByTax.end(); ++i){
+      line = QString("%1 %2")
+        .arg(i.key())
+        .arg(i.value());
+
+      lines.append(line);
+      line = QString("<tr><td>%1</td><td>%2</td></tr>")
+        .arg(i.key())
+        .arg(KGlobal::locale()->formatMoney(i.value(), QString(), 2));
+      linesHTML.append(line);
+    }
+    line = QString("%1 %2")
+        .arg(strTotal)
+        .arg(totalSellAmount);
+    lines.append(line);
+    line = QString("<tr><td>%1</td><td>%2</td></tr>")
+        .arg(strTotal)
+        .arg(KGlobal::locale()->formatMoney(totalSellAmount, QString(), 2));
+    
+    linesHTML.append(line);
+    line = QString("</table></center></body></html>");
+    linesHTML.append(line);
+        
     if (Settings::smallTicketDotMatrix()) {
       //print it on the /dev/lpXX...   send lines to print
       showBalance(linesHTML);

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: http://sourceforge.net/tracker/?"
 "atid=1011570&group_id=209899&func=browse\n"
-"POT-Creation-Date: 2014-07-21 01:29+0200\n"
+"POT-Creation-Date: 2014-10-04 12:46+0200\n"
 "PO-Revision-Date: 2007-11-22 23:17-0600\n"
 "Last-Translator: Miguel Chavez Gamboa <miguel@lemonpos.org>\n"
 "Language-Team: Español <es@lemonpos.org>\n"
@@ -232,7 +232,7 @@ msgstr "Mostrar checador de precios"
 msgid "Reprint ticket"
 msgstr "Reimprimir ticket"
 
-#: lemon.cpp:240 lemonview.cpp:5040
+#: lemon.cpp:240 lemonview.cpp:5094
 msgid "Cash Out"
 msgstr "Salida de efectivo"
 
@@ -240,11 +240,11 @@ msgstr "Salida de efectivo"
 msgid "Cash in drawer"
 msgstr "Efectivo en gaveta"
 
-#: lemon.cpp:252 lemonview.cpp:5083
+#: lemon.cpp:252 lemonview.cpp:5137
 msgid "Cash In"
 msgstr "Entrada de efectivo"
 
-#: lemon.cpp:258 lemonview.cpp:4268
+#: lemon.cpp:258 lemonview.cpp:4322
 msgid "End of day report"
 msgstr "Reporte de fin del día"
 
@@ -535,7 +535,7 @@ msgstr "Vendido por:"
 msgid "Price:"
 msgstr "Precio:"
 
-#: lemonview.cpp:2220 lemonview.cpp:4526 pricechecker.cpp:53
+#: lemonview.cpp:2220 lemonview.cpp:4580 pricechecker.cpp:53
 msgid "Discount:"
 msgstr "Descuento:"
 
@@ -631,8 +631,8 @@ msgstr ""
 msgid "Cash level in drawer is low."
 msgstr "El nivel de efectivo en gaveta es bajo."
 
-#: lemonview.cpp:3154 lemonview.cpp:3240 lemonview.cpp:4954 lemonview.cpp:5306
-#: lemonview.cpp:6767
+#: lemonview.cpp:3154 lemonview.cpp:3240 lemonview.cpp:5008 lemonview.cpp:5360
+#: lemonview.cpp:6821
 msgid "Notes:"
 msgstr "Notas:"
 
@@ -664,11 +664,11 @@ msgstr "Producto"
 msgid "Price"
 msgstr "Precio"
 
-#: lemonview.cpp:3228 lemonview.cpp:4799
+#: lemonview.cpp:3228 lemonview.cpp:4853
 msgid "Discount"
 msgstr "Descuento"
 
-#: lemonview.cpp:3229 lemonview.cpp:4798 refacturar.cpp:117
+#: lemonview.cpp:3229 lemonview.cpp:4021 lemonview.cpp:4852 refacturar.cpp:117
 msgid "Total"
 msgstr "Total"
 
@@ -860,259 +860,267 @@ msgstr "Cantidad de dinero a depositar en la gaveta:"
 msgid "Operation Started by %1 at terminal %2"
 msgstr "Operaciones iniciadas por %1 en terminal %2"
 
-#: lemonview.cpp:3996
+#: lemonview.cpp:3999
 msgid "Balance Id:%1"
 msgstr "Corte de caja # %1"
 
-#: lemonview.cpp:4002
+#: lemonview.cpp:4005
 msgid "%1 at Terminal # %2"
 msgstr "%1 en Terminal # %2"
 
-#: lemonview.cpp:4003
+#: lemonview.cpp:4006
 msgid "Initial Amount deposited:"
 msgstr "Cantidad inicial en la gaveta:"
 
-#: lemonview.cpp:4004
+#: lemonview.cpp:4007
 msgid "Deposit"
 msgstr "Depósito"
 
-#: lemonview.cpp:4005
+#: lemonview.cpp:4008
 msgid "In"
 msgstr "Entrada"
 
-#: lemonview.cpp:4006
+#: lemonview.cpp:4009
 msgid "Out"
 msgstr "Salida"
 
-#: lemonview.cpp:4007
+#: lemonview.cpp:4010
 msgid "In Drawer"
 msgstr "En la gaveta"
 
-#: lemonview.cpp:4008
+#: lemonview.cpp:4011
 msgid "Drawer Balance"
 msgstr "Corte de Caja"
 
-#: lemonview.cpp:4009
+#: lemonview.cpp:4012
 msgid "Transactions Details"
 msgstr "Detalles de transacción"
 
-#: lemonview.cpp:4010
+#: lemonview.cpp:4013
 msgid "Transactions"
 msgstr "Transacciones"
 
-#: lemonview.cpp:4011 lemonview.cpp:4269
+#: lemonview.cpp:4014 lemonview.cpp:4323
 msgid "Id"
 msgstr "Num"
 
-#: lemonview.cpp:4012 lemonview.cpp:4046 lemonview.cpp:4273 resume.cpp:155
+#: lemonview.cpp:4015 lemonview.cpp:4053 lemonview.cpp:4327 resume.cpp:155
 msgid "Time"
 msgstr "Hora"
 
-#: lemonview.cpp:4013 lemonview.cpp:4274 lemonview.cpp:6584 lemonview.cpp:6646
+#: lemonview.cpp:4016 lemonview.cpp:4328 lemonview.cpp:6638 lemonview.cpp:6700
 msgid "Amount"
 msgstr "Cantidad"
 
-#: lemonview.cpp:4014
+#: lemonview.cpp:4017
 msgid "Paid"
 msgstr "Pagado"
 
-#: lemonview.cpp:4015 lemonview.cpp:4276
+#: lemonview.cpp:4018 lemonview.cpp:4330
 msgid "Method"
 msgstr "Método"
 
-#: lemonview.cpp:4016
+#: lemonview.cpp:4019
+msgid "Sales by VAT type"
+msgstr ""
+
+#: lemonview.cpp:4020
+msgid "VAT type"
+msgstr ""
+
+#: lemonview.cpp:4023
 msgid ""
 "When Completing Reservations, the Amount may be grater than Paid (amount) "
 "because of the reservation payment."
 msgstr ""
 
-#: lemonview.cpp:4035
+#: lemonview.cpp:4042
 msgid "Start: %1"
 msgstr "Inicio: %1"
 
-#: lemonview.cpp:4036
+#: lemonview.cpp:4043
 msgid "End  : %1"
 msgstr "Fin : %1"
 
-#: lemonview.cpp:4043
+#: lemonview.cpp:4050
 msgid "Cash flow Details"
 msgstr "Detalles de flujo de efectivo"
 
-#: lemonview.cpp:4044
+#: lemonview.cpp:4051
 msgid "Type"
 msgstr "Tipo"
 
-#: lemonview.cpp:4045
+#: lemonview.cpp:4052
 msgid "Reason"
 msgstr "Razón:"
 
-#: lemonview.cpp:4047
+#: lemonview.cpp:4054
 msgid "This payment was not paid in cash."
 msgstr "Este pago no fue hecho en efectivo."
 
-#: lemonview.cpp:4195
+#: lemonview.cpp:4249
 msgid "Print Balance"
 msgstr "Imprimir Corte de caja"
 
-#: lemonview.cpp:4251
+#: lemonview.cpp:4305
 msgid "End of Day report printed by %1 at terminal %2 on %3"
 msgstr "Reporte de Fin del día impreso por %1 en terminal %2 el %3"
 
-#: lemonview.cpp:4271
+#: lemonview.cpp:4325
 msgid "at terminal # %1"
 msgstr "en terminal # %1"
 
-#: lemonview.cpp:4275
+#: lemonview.cpp:4329
 msgid "Profit"
 msgstr "Utilidades"
 
-#: lemonview.cpp:4277
+#: lemonview.cpp:4331
 msgid "Total taxes collected for this terminal: "
 msgstr "Total de impuestos recaudados en ésta terminal:"
 
-#: lemonview.cpp:4310
+#: lemonview.cpp:4364
 msgid "Total Sales : %1"
 msgstr "Ventas totales: %1"
 
-#: lemonview.cpp:4311
+#: lemonview.cpp:4365
 msgid "Total Profit: %1"
 msgstr "Utilidades totales: %1"
 
-#: lemonview.cpp:4329 lemonview.cpp:4355
+#: lemonview.cpp:4383 lemonview.cpp:4409
 msgid "Print end of day report"
 msgstr "Imprimir reporte de fin del día"
 
-#: lemonview.cpp:4423
+#: lemonview.cpp:4477
 msgid "All"
 msgstr ""
 
-#: lemonview.cpp:4524
+#: lemonview.cpp:4578
 msgid "Price: "
 msgstr "Precio:"
 
-#: lemonview.cpp:4525
+#: lemonview.cpp:4579
 msgid "Available: "
 msgstr "Disponible:"
 
-#: lemonview.cpp:4527
+#: lemonview.cpp:4581
 msgid "Category:"
 msgstr "Categoría:"
 
-#: lemonview.cpp:4528
+#: lemonview.cpp:4582
 msgid "in stock"
 msgstr "en invetario"
 
-#: lemonview.cpp:4529
+#: lemonview.cpp:4583
 msgid "in your shopping cart, Total Available"
 msgstr "en su carrito de compras, Total Disponible"
 
-#: lemonview.cpp:4748
+#: lemonview.cpp:4802
 #, fuzzy
 msgid "Discount: <b>%1%</b> [<b>%2</b>]"
 msgstr "Descuento: %1% [%2]"
 
-#: lemonview.cpp:4750
+#: lemonview.cpp:4804
 #, fuzzy
 msgid "Discount: <b>%1%</b>"
 msgstr "Descuento: %1% "
 
-#: lemonview.cpp:4753
+#: lemonview.cpp:4807
 #, fuzzy
 msgid "<i>%1</i> points"
 msgstr "%1 puntos"
 
-#: lemonview.cpp:4767
+#: lemonview.cpp:4821
 #, fuzzy
 msgid "Credit Total: <i>%1</i>"
 msgstr "Total del credito: %1"
 
-#: lemonview.cpp:4793
+#: lemonview.cpp:4847
 msgid "Tr"
 msgstr "Ticket #"
 
-#: lemonview.cpp:4794
+#: lemonview.cpp:4848
 msgid "Customer"
 msgstr ""
 
-#: lemonview.cpp:4795 lemonview.cpp:6582 lemonview.cpp:6644
+#: lemonview.cpp:4849 lemonview.cpp:6636 lemonview.cpp:6698
 #: reservations.cpp:173 resume.cpp:156 soselector.cpp:171 sostatus.cpp:167
 msgid "Date"
 msgstr "Fecha"
 
-#: lemonview.cpp:4796
+#: lemonview.cpp:4850
 msgid "User"
 msgstr "Usuario"
 
-#: lemonview.cpp:4797
+#: lemonview.cpp:4851
 msgid "Items"
 msgstr "Artículos"
 
-#: lemonview.cpp:4850
+#: lemonview.cpp:4904
 msgid "Please select a ticket to print."
 msgstr "Por favor seleccione un ticket a imprimir"
 
-#: lemonview.cpp:4850
+#: lemonview.cpp:4904
 msgid "Cannot print ticket"
 msgstr "No se pudo imprimir ticket"
 
-#: lemonview.cpp:4870
+#: lemonview.cpp:4924
 msgid "Reprint ticket cancelled."
 msgstr "Se cancelo la Reimpresión de tickes"
 
-#: lemonview.cpp:5034
+#: lemonview.cpp:5088
 msgid "Cash not available at drawer!"
 msgstr "Efectivo no disponible en gaveta"
 
-#: lemonview.cpp:5061
+#: lemonview.cpp:5115
 msgid "Cash-OUT by %1 at terminal %2 on %3"
 msgstr "Salida de Efectivo por %1 en terminal %2 el %3"
 
-#: lemonview.cpp:5105
+#: lemonview.cpp:5159
 msgid "Cash-IN [%1] by %2 at terminal %3 on %4"
 msgstr "Entrada de Efectivo por %1 en terminal %2 el %3"
 
-#: lemonview.cpp:5116
+#: lemonview.cpp:5170
 msgid "There are <b> %1 in cash </b> available at the drawer."
 msgstr "Hay <b>%1 disponibles</b> en la gaveta."
 
-#: lemonview.cpp:5137
+#: lemonview.cpp:5191
 msgid "Please finish the current transaction before creating a special order."
 msgstr "Por favor termine la venta actual antes de crear una orden especial."
 
-#: lemonview.cpp:5242
+#: lemonview.cpp:5296
 msgid ""
 "Please finish the current transaction before completing a special order."
 msgstr ""
 "Por favor termine la venta actual antes de completar una orden especial."
 
-#: lemonview.cpp:5259
+#: lemonview.cpp:5313
 msgid "The given ticket number does not contains any special order."
 msgstr "El número de ticket no contiene ninguna orden especial."
 
-#: lemonview.cpp:5266
+#: lemonview.cpp:5320
 msgid "These special orders cannot be completed because:"
 msgstr "Esta orden especial no puede ser completada porque:"
 
-#: lemonview.cpp:5273
+#: lemonview.cpp:5327
 msgid "<b>is Cancelled</b>"
 msgstr "<b>está Cancelada</b>"
 
-#: lemonview.cpp:5275
+#: lemonview.cpp:5329
 msgid "is already <b>Delivered</b>"
 msgstr "ya ha sido <b>Entregada</b>"
 
-#: lemonview.cpp:5276
+#: lemonview.cpp:5330
 msgid "%1 %2."
 msgstr "%1 %2."
 
-#: lemonview.cpp:5287
+#: lemonview.cpp:5341
 msgid ""
 "The special order %1 in ticket %2 is completely paid. Marked as delivered."
 msgstr ""
 "La orden especial %1 en ticket %2 esta pagada por completo. Marcada como "
 "entregada."
 
-#: lemonview.cpp:5372
+#: lemonview.cpp:5426
 msgid ""
 "<b>This terminal is locked.</b> <br><i>Please enter the user's password to "
 "unlock it</i>."
@@ -1120,15 +1128,15 @@ msgstr ""
 "<b>La terminal esta bloqueada.</b> <br><i>Por favor escriba la contraseña "
 "del usuario para desbloquearla.</i>"
 
-#: lemonview.cpp:5560
+#: lemonview.cpp:5614
 msgid "The sale %1 has been sucessfully suspended."
 msgstr "La venta %1 fue suspendida con éxito."
 
-#: lemonview.cpp:5612 specialordereditor.cpp:493
+#: lemonview.cpp:5666 specialordereditor.cpp:493
 msgid "Notes: %1"
 msgstr "Notas: %1"
 
-#: lemonview.cpp:5641
+#: lemonview.cpp:5695
 msgid ""
 "Please finish the current transaction before changing state for a special "
 "order."
@@ -1136,30 +1144,30 @@ msgstr ""
 "Por favor termine la venta actual antes de cambiar el estado de una orden "
 "especial."
 
-#: lemonview.cpp:5739
+#: lemonview.cpp:5793
 msgid "Changing price to product %1, from %2 to %3. Authorized by %4"
 msgstr "Cambiando el precio al producto %1, de %2 a %3. Autorizado por %4"
 
-#: lemonview.cpp:5772
+#: lemonview.cpp:5826
 msgid "Applying occasional discount. Authorized by %1"
 msgstr "Aplicando descuento ocasional. Autorizado por %1"
 
-#: lemonview.cpp:5843
+#: lemonview.cpp:5897
 msgid ""
 "Please Enter the reservation Amount in the Payment Amount and try again."
 msgstr ""
 "Por favor escriba la cantidad con la que se aparta en el campo de cantidad a "
 "pagar."
 
-#: lemonview.cpp:5914
+#: lemonview.cpp:5968
 msgid "Reservation #%1 [tr. %2]"
 msgstr "Apartado #%1 [Tr. %2]"
 
-#: lemonview.cpp:5936
+#: lemonview.cpp:5990
 msgid "Cash-IN [%1] for RESERVATION [%5] by %2 at terminal %3 on %4"
 msgstr "Entrada de Efectivo %1 para APARTADO [%5] por %2 en terminal %3 el %4"
 
-#: lemonview.cpp:5996
+#: lemonview.cpp:6050
 msgid ""
 "Cannot make a reservation, no products on the list. Special Orders are not "
 "considered."
@@ -1167,11 +1175,11 @@ msgstr ""
 "No se puede hacer un apartado, no hay productos que apartar. Las Ordenes "
 "especiales no pueden apartarse."
 
-#: lemonview.cpp:6021
+#: lemonview.cpp:6075
 msgid "The sale %1 has been sucessfully reserved."
 msgstr "La venta %1 fue apartada con éxito."
 
-#: lemonview.cpp:6127
+#: lemonview.cpp:6181
 #, fuzzy
 msgid ""
 "You need to finish or suspend the current sale or reservation before adding "
@@ -1180,16 +1188,16 @@ msgstr ""
 "Por favor termine la venta actual antes de cambiar el estado de una orden "
 "especial."
 
-#: lemonview.cpp:6149
+#: lemonview.cpp:6203
 msgid "Enter the amount to pay to the reservation. The Maximum amount is %1"
 msgstr ""
 
-#: lemonview.cpp:6177
+#: lemonview.cpp:6231
 #, fuzzy
 msgid "Payment for Reservation %1"
 msgstr "Pago por Credito %1"
 
-#: lemonview.cpp:6192
+#: lemonview.cpp:6246
 #, fuzzy
 msgid ""
 "Cash-IN-ReservationPayment [%1] for reservation %5 by %2 at terminal %3 on %4"
@@ -1197,115 +1205,115 @@ msgstr ""
 "Entrada de Efectivo [%1] para Pago del Credito %5, por %2 en terminal %3 el "
 "%4"
 
-#: lemonview.cpp:6343
+#: lemonview.cpp:6397
 msgid "Make partial payment"
 msgstr "Hacer un pago parcial"
 
-#: lemonview.cpp:6345
+#: lemonview.cpp:6399
 msgid "Pay"
 msgstr "Pagar"
 
-#: lemonview.cpp:6463
+#: lemonview.cpp:6517
 msgid "Payment for Credit %1"
 msgstr "Pago por Credito %1"
 
-#: lemonview.cpp:6478
+#: lemonview.cpp:6532
 msgid "Cash-IN-CreditPayment [%1] for credit %5 by %2 at terminal %3 on %4"
 msgstr ""
 "Entrada de Efectivo [%1] para Pago del Credito %5, por %2 en terminal %3 el "
 "%4"
 
-#: lemonview.cpp:6533
+#: lemonview.cpp:6587
 msgid "CREDIT REPORT"
 msgstr "REPORTE DE CREDITO"
 
-#: lemonview.cpp:6545
+#: lemonview.cpp:6599
 #, fuzzy
 msgid "Balance: %1"
 msgstr "Corte de caja # %1"
 
-#: lemonview.cpp:6570
+#: lemonview.cpp:6624
 #, fuzzy
 msgid "Today Credit History"
 msgstr "Historial del Crédito"
 
-#: lemonview.cpp:6586 lemonview.cpp:6648
+#: lemonview.cpp:6640 lemonview.cpp:6702
 msgid "Sale #"
 msgstr "Venta #"
 
-#: lemonview.cpp:6588 lemonview.cpp:6650
+#: lemonview.cpp:6642 lemonview.cpp:6704
 msgid "Invoice"
 msgstr ""
 
-#: lemonview.cpp:6600 lemonview.cpp:6662
+#: lemonview.cpp:6654 lemonview.cpp:6716
 msgid "Payment"
 msgstr "Pago"
 
-#: lemonview.cpp:6628
+#: lemonview.cpp:6682
 msgid "Credit History"
 msgstr "Historial del Crédito"
 
-#: lemonview.cpp:6706 lemonview.cpp:6711 lemonview.cpp:6725 lemonview.cpp:6810
-#: lemonview.cpp:6855 lemonview.cpp:6858
+#: lemonview.cpp:6760 lemonview.cpp:6765 lemonview.cpp:6779 lemonview.cpp:6864
+#: lemonview.cpp:6909 lemonview.cpp:6912
 #, fuzzy
 msgid "Facturar"
 msgstr "Factor:"
 
-#: lemonview.cpp:6706
+#: lemonview.cpp:6760
 msgid "No hay folios disponibles. No se puede facturar"
 msgstr ""
 
-#: lemonview.cpp:6711
+#: lemonview.cpp:6765
 msgid "Numero de Ticket:"
 msgstr ""
 
-#: lemonview.cpp:6725
+#: lemonview.cpp:6779
 msgid ""
 "No se puede facturar, la venta YA HABIA SIDO FACTURADA.\n"
 "El folio de esta venta es el %1"
 msgstr ""
 
-#: lemonview.cpp:6810
+#: lemonview.cpp:6864
 msgid ""
 "No se puede facturar. El folio obtenido es inválido, verifique sus folios."
 msgstr ""
 
-#: lemonview.cpp:6855
+#: lemonview.cpp:6909
 msgid "El ticket %1 no existe. No se puede facturar"
 msgstr ""
 
-#: lemonview.cpp:6858
+#: lemonview.cpp:6912
 msgid "No se escribio un numero de ticket. No se puede facturar"
 msgstr ""
 
-#: lemonview.cpp:6875
+#: lemonview.cpp:6929
 #, fuzzy
 msgid "Cancelar Factura"
 msgstr "Cancelar ticket"
 
-#: lemonview.cpp:6875
+#: lemonview.cpp:6929
 msgid "Folio de la Factura:"
 msgstr ""
 
-#: lemonview.cpp:6883 lemonview.cpp:6885 lemonview.cpp:6889 lemonview.cpp:6891
+#: lemonview.cpp:6937 lemonview.cpp:6939 lemonview.cpp:6943 lemonview.cpp:6945
 msgid "Cancelación de factura"
 msgstr ""
 
-#: lemonview.cpp:6883
+#: lemonview.cpp:6937
 msgid "Se cancelo la factura con folio %1."
 msgstr ""
 
-#: lemonview.cpp:6885
+#: lemonview.cpp:6939
 msgid ""
 "No se pudo cancelar la factura con folio %1.\n"
 " Detalle:"
 msgstr ""
 
-#: lemonview.cpp:6889
+#: lemonview.cpp:6943
 msgid "La factura %1 ya estaba cancelada"
 msgstr ""
 
-#: lemonview.cpp:6891
+#: lemonview.cpp:6945
 msgid "La factura %1 no existe."
 msgstr ""
 
@@ -1423,20 +1431,20 @@ msgstr "Precio regular:"
 msgid "Final price:"
 msgstr "Precio Final:"
 
-#: productdelegate.cpp:125
+#: productdelegate.cpp:123
 msgid "Unlimited Stock"
 msgstr ""
 
-#: productdelegate.cpp:127
+#: productdelegate.cpp:125
 msgid " Out of stock "
 msgstr " Agotado "
 
-#: productdelegate.cpp:151
+#: productdelegate.cpp:149
 #, fuzzy
 msgid "Stock"
 msgstr "Inventario bajo"
 
-#: productdelegate.cpp:164
+#: productdelegate.cpp:162
 msgid " Raw Product "
 msgstr "Producto/Materia Prima"
 
