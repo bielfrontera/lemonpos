@@ -836,8 +836,7 @@ void lemonView::clearUsedWidgets()
   ui_mainview.labelDetailDiscount->setText("");
   ui_mainview.labelDetailTotalTaxes->setText("");
   ui_mainview.labelDetailPhoto->clear();
-  ui_mainview.labelDetailPoints->clear();
-  ui_mainview.textLongDesc->hide();
+  ui_mainview.labelDetailPoints->clear();  
 
   //enable clients combo box...
   ui_mainview.groupClient->setEnabled(true);
@@ -2255,10 +2254,6 @@ void lemonView::displayItemInfo(QTableWidgetItem* item)
         .arg(tPoints).arg(info.points));
       ui_mainview.labelDetailPoints->show();
     } else ui_mainview.labelDetailPoints->hide();
-    if (info.longDesc.length()>0){
-        ui_mainview.textLongDesc->setText(info.longDesc);
-        ui_mainview.textLongDesc->show();        
-    }else ui_mainview.textLongDesc->hide();
         
   }
 }
