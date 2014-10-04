@@ -148,6 +148,7 @@ squeezeView::squeezeView(QWidget *parent)
   ui_mainview.btnBalances->setIcon(DesktopIcon("lemonbalance", 32));
   ui_mainview.btnCashFlow->setIcon(DesktopIcon("lemon-cashout", 32));
   ui_mainview.btnTransactions->setIcon(DesktopIcon("wallet-open", 32));
+  ui_mainview.btnTransactionsByTax->setIcon(DesktopIcon("wallet-open", 32));
   ui_mainview.btnSO->setIcon(DesktopIcon("lemon-box", 32));
 
 
@@ -384,6 +385,7 @@ void squeezeView::setupSignalConnections()
 
   connect(ui_mainview.btnBalances, SIGNAL(clicked()),  SLOT(showBalancesPage()));
   connect(ui_mainview.btnTransactions, SIGNAL(clicked()),  SLOT(showTransactionsPage()));
+  connect(ui_mainview.btnTransactionsByTax, SIGNAL(clicked()),  SLOT(showTransactionsByTaxPage()));
   connect(ui_mainview.btnCashFlow, SIGNAL(clicked()),  SLOT(showCashFlowPage()));
   connect(ui_mainview.btnSO, SIGNAL(clicked()),  SLOT(showSpecialOrders()));
 
@@ -541,6 +543,7 @@ void squeezeView::showBalancesPage()
   QTimer::singleShot(200,fpFilterBalances, SLOT(fixPos()));
 }
 
+
 void squeezeView::showSpecialOrders()
 {
   ui_mainview.stackedWidget->setCurrentIndex(pReports);
@@ -550,6 +553,22 @@ void squeezeView::showSpecialOrders()
   ui_mainview.headerImg->setPixmap((DesktopIcon("lemon-box",48))); //FIXME: Create an icon
   QTimer::singleShot(200,fpFilterSpecialOrders, SLOT(fixPos()));
   ui_mainview.datePicker->setDate(QDate::currentDate());
+}
+
+
+void squeezeView::showTransactionsByTaxPage()
+{
+  qDebug()<<"Entra a show transactions page";
+  ui_mainview.stackedWidget->setCurrentIndex(pReports);
+  qDebug()<<"Set de stacked widget";
+  ui_mainview.stackedWidget2->setCurrentIndex(5);
+  qDebug()<<"Set current index";
+  if (transactionsByTaxModel->tableName().isEmpty()) setupTransactionsByTaxModel();
+  qDebug()<<"Setup transactions";
+  ui_mainview.headerLabel->setText(i18n("Transactions by Tax"));
+  ui_mainview.headerImg->setPixmap((DesktopIcon("lemon-reports",48)));
+  // TODO: ui_mainview.btnPrintBalance->show();
+  ui_mainview.btnPrintBalance->hide();
 }
 
 
@@ -879,6 +898,7 @@ void squeezeView::setupDb()
     clientsModel    = new QSqlTableModel();
     transactionsModel = new QSqlRelationalTableModel();
     balancesModel   = new QSqlTableModel();
+    transactionsByTaxModel = new QSqlTableModel();
     cashflowModel   = new QSqlRelationalTableModel();
     specialOrdersModel   = new QSqlRelationalTableModel();
     randomMsgModel  = new QSqlTableModel();
@@ -1731,8 +1751,10 @@ void squeezeView::setupBalancesModel()
     balancesModel->setHeaderData(balanceTransIndex, Qt::Horizontal, i18n("Transactions") );
     balancesModel->setHeaderData(balanceTerminalNumIndex, Qt::Horizontal, i18n("Terminal #") );
     
+  
     
     ui_mainview.balancesTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui_mainview.balancesTable->sortByColumn(1, Qt::DescendingOrder);
     //     ProductDelegate *delegate = new ProductDelegate(ui_mainview.productsView);
     //     ui_mainview.productsView->setItemDelegate(delegate);
     
@@ -1740,6 +1762,38 @@ void squeezeView::setupBalancesModel()
   }
   qDebug()<<"setupBalances.. done.";
 }
+
+
+void squeezeView::setupTransactionsByTaxModel()
+{
+  openDB();
+  qDebug()<<"setuptransactionsByTaxModel.. after openDB";
+  if (db.isOpen()) {
+    transactionsByTaxModel->setTable("v_TransactionsByTax");
+    
+    transactionsByTaxDateIndex = transactionsByTaxModel->fieldIndex("date");
+    transactionsByTaxTaxIndex = transactionsByTaxModel->fieldIndex("tax"); //just one date...
+    transactionsByTaxTotalSoldIndex= transactionsByTaxModel->fieldIndex("total_sold");
+    transactionsByTaxTotalCostIndex= transactionsByTaxModel->fieldIndex("total_cost");
+    
+    ui_mainview.transactionsByTaxTable->setModel(transactionsByTaxModel);
+    ui_mainview.transactionsByTaxTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    
+    transactionsByTaxModel->setHeaderData(transactionsByTaxDateIndex, Qt::Horizontal, i18n("Date"));
+    transactionsByTaxModel->setHeaderData(transactionsByTaxTaxIndex, Qt::Horizontal, i18n("Tax"));
+    transactionsByTaxModel->setHeaderData(transactionsByTaxTotalSoldIndex, Qt::Horizontal, i18n("Total sold") );
+    transactionsByTaxModel->setHeaderData(transactionsByTaxTotalCostIndex, Qt::Horizontal, i18n("Total cost") );
+    
+    ui_mainview.transactionsByTaxTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui_mainview.transactionsByTaxTable->sortByColumn(0, Qt::DescendingOrder);
+    //     ProductDelegate *delegate = new ProductDelegate(ui_mainview.productsView);
+    //     ui_mainview.productsView->setItemDelegate(delegate);
+    
+    transactionsByTaxModel->select();
+  }
+  qDebug()<<"setup transactionsByTaxModel.. done.";
+}
+
 
 //FIXME: When filtering by User, we need filter by user or username? and just = or with a regexp or a 'like' search??
 void squeezeView::setBalancesFilter()

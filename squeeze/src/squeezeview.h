@@ -75,6 +75,7 @@ public:
     QSqlTableModel *departmentsModel;
     QSqlRelationalTableModel *subcategoriesModel;
     QSqlTableModel *balancesModel;
+    QSqlTableModel *transactionsByTaxModel;
     QSqlTableModel *clientsModel;
     QSqlTableModel *randomMsgModel;
     QSqlRelationalTableModel *reservationsModel;
@@ -93,6 +94,7 @@ public:
     QTimer *timerCheckDb, *timerUpdateGraphs;
     int balanceIdIndex, balanceDateEndIndex, balanceUserNameIndex, balanceInitAmountIndex, balanceInIndex, balanceOutIndex, balanceCashIndex, balanceCardIndex,balanceTransIndex, balanceTerminalNumIndex, balanceDateStartIndex, balanceUseridIndex;
     int cashflowIdIndex, cashflowDateIndex, cashflowTimeIndex, cashflowUseridIndex, cashflowReasonIndex, cashflowAmountIndex,    cashflowTerminalNumIndex, cashflowTypeIndex;
+    int transactionsByTaxDateIndex, transactionsByTaxTaxIndex, transactionsByTaxTotalSoldIndex, transactionsByTaxTotalCostIndex; 
     int counter;
     bool modelsCreated,graphSoldItemsCreated;
     KPlotObject *objProfit, *objSales, *objMostSold, *objMostSoldB;
@@ -170,6 +172,8 @@ signals:
    void adjustProductsTable();
    void showBalancesPage();
    void setupBalancesModel();
+   void showTransactionsByTaxPage();
+   void setupTransactionsByTaxModel();
    void showCashFlowPage();
    void showSpecialOrders();
    void setupCashFlowModel();
